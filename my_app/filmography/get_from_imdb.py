@@ -25,14 +25,13 @@ class ActorInfo:
     def get_data(self, params, data):
         headers = {
         'x-rapidapi-host': "imdb8.p.rapidapi.com",
-        #self.BASE_URL[8:-1] nie wygląda dobrze
         'x-rapidapi-key': self.api_key
         }
         response = requests.request("GET", url=self.build_url(params), headers=headers, params=self.create_querystring(params, data))
         content = response.json()
         return content
 
-    def get_actor_id(self, fullname):
+    def get_actors_ids(self, fullname):
         data = []
         actor_id = self.get_data("id", fullname)
         id = actor_id["d"]
@@ -42,15 +41,15 @@ class ActorInfo:
                 actor = {"name": el["l"], "id": el["id"], "image": el['i']["imageUrl"]}
                 data.append(actor)
         return data
-        # ALGORYTM LEVEINSHTEINA ALBO COŚ W TEN DESEN JUŻ KTOŚ INNY ZAIMPLEMENTOWAŁ DO TEGO ;p
-        # zwraca listę słowników z name, id i image poszczególnych aktorów
-
+        # ALGORYTM LEVEINSHTEINA ?
+    
     def get_actor_info(self, id):
         info = self.get_data("actor_data", id)
         return info
 
     def get_actor_filmography(self,id):
         filmography = self.get_actor_info(id)["filmography"]
+        #print(self.get_actor_info(data)["filmography"])
         lst_of_filmography = []
         for el in filmography:
             if el["category"]=="actress" or el["category"]=="actor":
@@ -59,6 +58,6 @@ class ActorInfo:
 
 actor = ActorInfo(os.getenv("API_KEY"))
 #x = actor.get_actor_filmography("nm0000148") # po id!
-y = actor.get_actor_id("Felicity Jones")
+#y = actor.get_actors_ids("Felicity Jones")
 #print(x)
-print(y)
+#print(y)
