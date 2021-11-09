@@ -6,7 +6,8 @@ class Movie(models.Model):
 
 class Actor(models.Model):
     fullname = models.CharField(max_length=128)
-    movies = models.ManyToManyField(Movie) # musi być coś więcej, żeby odróżnić ludzi o tym samym fullname
+    nm = models.CharField(max_length=128)
+    movies = models.ManyToManyField(Movie)
 
 class User(AbstractUser):
     pass
