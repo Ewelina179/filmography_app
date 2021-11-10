@@ -25,7 +25,7 @@ def get_actor(request):
             actor_form = form.cleaned_data['actor']
             print(actor_form)
             try:
-                lst_of_actors_with_the_same_fullname = actor.get_actors_ids(actor_form) # musi dać listę wyników dla tego
+                lst_of_actors_with_the_same_fullname = actor.get_actors_ids(actor_form)
                 for el in lst_of_actors_with_the_same_fullname:
                     actor = {"name": el["name"], "id": el["id"], "image": el["image"]}
                     cont.update(actor)
@@ -42,16 +42,14 @@ def actors(request, lst_of):# to co wpada to lista. niech ją wyświetli. każdy
         print(el)
     return render(request, 'users/lst_of_actors.html')
 
-# to z hiperłącza muszą przyjść dane - które fullname
 def actor_detail(request, nm):
-    print(nm) # nie mogę przyjąć id, nie wiem czemu
-    #nm = "nm0000148"
+    print(nm)
     from filmography.get_from_imdb import actor
     user = User.objects.get(pk=1)
     try:
         obj = Actor.objects.get(nm=nm)
     except Actor.DoesNotExist:
-        x = actor.get_actor_filmography("nm0000148") # SET API KEY!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        x = actor.get_actor_filmography(nm) # SET API KEY!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         obj = Actor(nm=nm)
         obj.save()
         for el in x:
@@ -66,8 +64,11 @@ def actor_detail(request, nm):
             actor.save()
     print(obj.fullname)
     print(Actor.objects.get(nm=nm))
-    #f = Favourite(user=user, actor=obj, is_favourite=True)
-    #f.save()
+
+# jeśli obiekty w bazie już sprzężone (był ulubiony, nie był i teraz znów ulubiony)
+    objj, created = Favourite.objects.update_or_create(
+    user=user, actor=obj, is_favourite=True)
+
     print(user.actors.all())
     print(obj.user_set.all())
     for el in obj.movies.all():
