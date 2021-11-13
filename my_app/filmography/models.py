@@ -1,19 +1,31 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
-class Movie(models.Model):
-    title = models.CharField(max_length=128, unique=True)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class ActorUser(models.Model):
+    user = models.ForeignKey('filmography.UserProfile', on_delete=models.CASCADE)
+    actor = models.ForeignKey('filmography.Actor', on_delete=models.CASCADE)
+
 
 class Actor(models.Model):
     fullname = models.CharField(max_length=128)
-    nm = models.CharField(max_length=128)
-    movies = models.ManyToManyField(Movie)
 
-class User(AbstractUser):
-    pass
-    actors = models.ManyToManyField(Actor, through='Favourite') # tu unique? Bo się dodaje w nieskonczoność
 
-class Favourite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
-    is_favourite = models.BooleanField() # domyślnie musi być False
+class Movie(models.Model):
+    id_from_imdb = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128)
+
+
+class ActorMovie(models.Model):
+    actor = models.ForeignKey('filmography.Actor', on_delete=models.CASCADE)
+    movie = models.ForeignKey('filmography.Movie', on_delete=models.CASCADE)
+
+
+class UserAPIRequest(models.Model):
+    user = models.ForeignKey('filmography.UserProfile', on_delete=models.SET_NULL, null=True)
+    data = models.DateTimeField(auto_now=True)
+    #is_cos tam =
+    #pass
