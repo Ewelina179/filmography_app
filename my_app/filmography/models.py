@@ -29,3 +29,9 @@ class UserAPIRequest(models.Model):
     data = models.DateTimeField(auto_now=True)
     #is_cos tam =
     #pass
+    
+
+class ActorFormModel(models.Model):
+    user = models.ForeignKey('filmography.UserProfile', on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now=True)
+    fullname = models.CharField(max_length=128)
