@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from .forms import ActorForm, CustomUserCreationForm
 from filmography.models import *
 from filmography.get_from_imdb import actor
 from django.contrib import messages
+from django.http import HttpResponse
 
 def register(request):
     if request.method == "GET":
@@ -23,14 +25,20 @@ def register(request):
                           template_name = "users/register.html",
                           context={"form":CustomUserCreationForm})
 
-def home(request):
-    return render(request, "home.html")
-
+@login_required
 def dashboard(request):
-    
-    user = User.objects.get(pk=1)
-    print(user)
-    return render(request, "users/dashboard.html")
+    if request.method == 'POST':
+        form = ActorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Your answer has been saved!')
+    else:
+        form = ActorForm()
+        context = {
+            'form':form,
+        }
+    return render(request, "users/dashboard.html", context)
+
 """"
 
 def get_actor(request):
