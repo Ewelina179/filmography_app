@@ -1,8 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from .models import ActorFormModel
 
 class ActorForm(forms.Form):
-    actor = forms.CharField(label="Name", max_length=100)
+    class Meta:
+        model = ActorFormModel
+        fields = ['user', 'date', 'fullname']
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
