@@ -2,38 +2,35 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .forms import ActorForm, CustomUserCreationForm
+from .forms import ActorUserRequestForm, CustomUserCreationForm
 from filmography.models import *
 from filmography.get_from_imdb import actor
 from django.contrib import messages
 from django.http import HttpResponse
 
 def register(request):
-    if request.method == "GET":
-        return render(request, "users/register.html", {"form": CustomUserCreationForm})
-    elif request.method == "POST":
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect(reverse("dashboard"))
-        else:
-            for msg in form.error_messages:
-                #messages.error(request, f"{msg}: {form.error_messages[msg]}")
-                messages.add_message(request, messages.ERROR, 'Username is already taken.')
-            return render(request = request,
-                          template_name = "users/register.html",
-                          context={"form":CustomUserCreationForm})
+    else:
+        form = CustomUserCreationForm()
+        context = {
+            'form':form,
+        }
+    return render(request, "users/register.html", context)
 
 @login_required
 def dashboard(request):
     if request.method == 'POST':
-        form = ActorForm(request.POST)
+        form = ActorUserRequestForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponse('Your answer has been saved!')
     else:
-        form = ActorForm()
+        form = ActorUserRequestForm()
         context = {
             'form':form,
         }
