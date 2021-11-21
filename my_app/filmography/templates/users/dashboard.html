@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Hello, {{ user.username|default:'Guest' }}!
-Dashboard!
+<h2 class="mt-3 text-center">Cześć, {{ user.username|default:'Guest' }}!</h2>
+<br>
+<h2 class="mt-3 text-center">Wpisz imię i nazwisko, żeby odnaleźć intersującego aktora/aktorkę</h2>
+<br>
 
-<div>
-    {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">Logout</a>
-        <a href="{% url 'password_change' %}">Change password</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-    {% endif %}
-</div>
+{% load crispy_forms_tags %}
+
+<form method="post" novalidate, class="w-50", style="margin:auto;">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">Submit</button>
+  </form>
+
 {% endblock %}
