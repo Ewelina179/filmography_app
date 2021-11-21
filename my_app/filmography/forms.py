@@ -1,11 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import ActorFormModel
+from .models import ActorUserRequest
+from django.forms import ModelForm
 
-class ActorForm(forms.Form):
+class ActorUserRequestForm(ModelForm):
     class Meta:
-        model = ActorFormModel
-        fields = ['user', 'date', 'fullname']
+        model = ActorUserRequest
+        fields = ['phrase']
 
 
 class CustomUserCreationForm(UserCreationForm):
