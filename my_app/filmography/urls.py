@@ -4,7 +4,7 @@ from filmography.views import register, dashboard #home, , actors, actor_detail,
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
-    path("dashboard/", dashboard, name="dashboard"),
+    path("", dashboard, name="dashboard"),
     path("register/", register, name="register"),
     #path('actors/<cont>', actors, name="actors"),
     #url(r'^cont/$', actors, name="actors"),
