@@ -3,7 +3,10 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    first_name = models.CharField(max_length=64, null=True)
+    last_name = models.CharField(max_length=64, null=True)
+    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    objects = models.Manager()
 
 class ActorUser(models.Model):
     user = models.ForeignKey('filmography.UserProfile', on_delete=models.CASCADE)
@@ -24,14 +27,8 @@ class ActorMovie(models.Model):
     movie = models.ForeignKey('filmography.Movie', on_delete=models.CASCADE)
 
 
-class UserAPIRequest(models.Model):
+class ActorUserRequest(models.Model):
     user = models.ForeignKey('filmography.UserProfile', on_delete=models.SET_NULL, null=True)
-    data = models.DateTimeField(auto_now=True)
-    #is_cos tam =
-    #pass
-    
-
-class ActorFormModel(models.Model):
-    user = models.ForeignKey('filmography.UserProfile', on_delete=models.SET_NULL, null=True)
-    date = models.DateTimeField(auto_now=True)
-    fullname = models.CharField(max_length=128)
+    datetime = models.DateTimeField(auto_now_add=True)
+    phrase = models.CharField(max_length=64)
+    response = models.TextField(blank=True, default="")
