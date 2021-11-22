@@ -1,11 +1,14 @@
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
+from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import ActorUserRequestForm, CustomUserCreationForm
-from filmography.models import *
-from filmography.get_from_imdb import actor
-from django.contrib import messages
+from .models import *
+from .get_from_imdb import actor
 from django.http import HttpResponse
 
 def register(request):
@@ -35,6 +38,17 @@ def dashboard(request):
             'form':form,
         }
     return render(request, "users/dashboard.html", context)
+
+class UserProfile(LoginRequiredMixin, DetailView):
+    model = UserProfile
+    template_name = "users/userprofile_detail.html"
+
+class UpdateUserProfile(LoginRequiredMixin, UpdateView):
+    model = UserProfile
+    
+    fields = ['first_name', 'last_name', 'avatar']
+
+    success_url =""
 
 """"
 
