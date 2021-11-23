@@ -27,6 +27,7 @@ def register(request):
 
 @login_required
 def dashboard(request):
+    userprofile=UserProfile.objects.filter(user=request.user.id).first()
     if request.method == 'POST':
         form = ActorUserRequestForm(request.POST)
         if form.is_valid():
@@ -36,20 +37,25 @@ def dashboard(request):
         form = ActorUserRequestForm()
         context = {
             'form':form,
+            'userprofile': userprofile.id
         }
     return render(request, "users/dashboard.html", context)
 
-class UserProfile(LoginRequiredMixin, DetailView):
+class UserProfileView(LoginRequiredMixin, DetailView):
     model = UserProfile
     template_name = "users/userprofile_detail.html"
+    
 
 class UpdateUserProfile(LoginRequiredMixin, UpdateView):
     model = UserProfile
     
     fields = ['first_name', 'last_name', 'avatar']
-
     success_url =""
 
+    template_name = "users/userprofile_form.html"
+
+    #def get_queryset(self):
+    #    return UserProfile.objects.filter(user=self.request.user)
 """"
 
 def get_actor(request):
