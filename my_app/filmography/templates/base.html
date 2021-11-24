@@ -20,16 +20,12 @@
             <a class="nav-link" href="{% url 'password_change' %}">Zmień hasło</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'userprofileview' userprofile %}">Profil</a>
+            <a class="nav-link" href="{% url 'userprofileview' userprofile.pk %}">Profil</a>
           </li>
             {% else %}
             <a class="nav-link" href="{% url 'login'%}">Zaloguj</a>
             </li>
             <a class="nav-link" href="{% url 'register'%}">Zarejestruj</a>
-            </li>
-            <a class="nav-link" href="{% url 'register'%}">Profil</a>
-            </li>
-            <a class="nav-link" href="{% url 'register'%}">Zmień profil</a>
             </li>
         {% endif %}
             </ul>
