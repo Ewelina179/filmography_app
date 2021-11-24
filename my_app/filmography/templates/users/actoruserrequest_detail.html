@@ -1,0 +1,45 @@
+  <div id="container" style="width: 75%;">
+    <canvas id="usaged_api_chart" data-url="{% url 'usaged_api_chart' %}"></canvas>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+    $(function () {
+
+      var $usaged_api_Chart = $("#usaged_api_chart");
+      $.ajax({
+        url: $usaged_api_Chart.data("url"),
+        success: function (data) {
+
+          var ctx = $usaged_api_Chart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'daily usage',
+                backgroundColor: 'blue',
+                data: data.data
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'API daily usaged Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>

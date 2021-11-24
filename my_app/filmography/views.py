@@ -9,7 +9,9 @@ from django.contrib.auth.decorators import login_required
 from .forms import ActorUserRequestForm, CustomUserCreationForm
 from .models import *
 from .get_from_imdb import actor
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 
 def register(request):
     if request.method == "POST":
@@ -37,7 +39,7 @@ def dashboard(request):
         form = ActorUserRequestForm()
         context = {
             'form':form,
-            'userprofile': userprofile.id
+            'userprofile': userprofile
         }
     return render(request, "users/dashboard.html", context)
 
@@ -50,12 +52,30 @@ class UpdateUserProfile(LoginRequiredMixin, UpdateView):
     model = UserProfile
     
     fields = ['first_name', 'last_name', 'avatar']
-    success_url =""
+    success_url ="/" # jak cofnąć do detail view
 
     template_name = "users/userprofile_form.html"
 
-    #def get_queryset(self):
-    #    return UserProfile.objects.filter(user=self.request.user)
+def actoruserrequestview(request):
+    return render(request, "users/actoruserrequest_detail.html")
+
+def usaged_api_chart(request):
+    labels = []
+    data = []
+
+    queryset = ActorUserRequest.objects.all().annotate(date=TruncDate('datetime')).values('date').annotate(**{'dailyusage': Count('date')})
+    for entry in queryset:
+        labels.append(entry['date'])
+        data.append(entry['dailyusage'])
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+#class ActorUserRequestView(LoginRequiredMixin, DetailView):
+#    model = ActorUserRequest
+#    template_name = "users/actoruserrequest_detail.html"
+
 """"
 
 def get_actor(request):
