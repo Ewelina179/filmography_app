@@ -29,7 +29,6 @@ def register(request):
 
 @login_required
 def dashboard(request):
-    userprofile=UserProfile.objects.filter(user=request.user.id).first()
     if request.method == 'POST':
         form = ActorUserRequestForm(request.POST)
         if form.is_valid():
@@ -39,9 +38,9 @@ def dashboard(request):
         form = ActorUserRequestForm()
         context = {
             'form':form,
-            'userprofile': userprofile
         }
     return render(request, "users/dashboard.html", context)
+
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = UserProfile

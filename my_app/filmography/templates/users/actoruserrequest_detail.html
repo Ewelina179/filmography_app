@@ -1,3 +1,5 @@
+{% extends 'base.html' %}  
+{% block content %}
   <div id="container" style="width: 75%;">
     <canvas id="usaged_api_chart" data-url="{% url 'usaged_api_chart' %}"></canvas>
   </div>
@@ -16,7 +18,7 @@
           var ctx = $usaged_api_Chart[0].getContext("2d");
 
           new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
               labels: data.labels,
               datasets: [{
@@ -43,3 +45,5 @@
     });
 
   </script>
+
+{% endblock %}
