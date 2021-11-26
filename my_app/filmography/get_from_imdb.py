@@ -34,6 +34,8 @@ class ActorInfo:
     def get_actors_ids(self, fullname):
         data = []
         actor_id = self.get_data("id", fullname)
+        print(actor_id)
+        print(self.api_key)
         id = actor_id["d"]
         for el in id:
             if el.get("i"):
@@ -56,7 +58,6 @@ class ActorInfo:
                 lst_of_filmography.append(el["title"])
         return lst_of_filmography
 
-actor = ActorInfo(os.getenv("API_KEY"))
 #x = actor.get_actor_filmography("nm0000148") # po id!
 #y = actor.get_actors_ids("Felicity Jones")
 #print(x)

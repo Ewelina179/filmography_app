@@ -138,3 +138,4 @@ LOGOUT_REDIRECT_URL = 'dashboard'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+from .sitesettings import *

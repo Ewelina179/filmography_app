@@ -1,5 +1,11 @@
+from django.apps import apps
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+
+import json
+
+from .get_from_imdb import ActorInfo
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,8 +19,25 @@ class ActorUser(models.Model):
     actor = models.ForeignKey('filmography.Actor', on_delete=models.CASCADE)
 
 
+class ActorManager(models.Manager):
+
+    def register_from_response(self, response):
+        #response = response.replace("\'", "\"")
+        #response = json.loads(response)
+        for entry in response:
+            if 'nm' in entry['id']:
+                self.get_or_create(
+                    imdb_id=entry['id'],
+                    defaults={
+                        'fullname': entry['name']
+                    }
+                )
+
 class Actor(models.Model):
     fullname = models.CharField(max_length=128)
+    imdb_id = models.CharField(max_length=64, unique=True)
+
+    objects = ActorManager()
 
 
 class Movie(models.Model):
@@ -32,3 +55,23 @@ class ActorUserRequest(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     phrase = models.CharField(max_length=64)
     response = models.TextField(blank=True, default="")
+    status = models.CharField(
+        max_length=1,
+        choices=(('p', 'W kolejce'), ('r', 'W trakcie pobierania'), ('e', 'Błąd'), ('d', 'Pobrano')),
+        default='p'
+    )
+
+    def set_response(self):
+        self.status = 'r'
+        self.save()
+        try:
+            actor = ActorInfo(settings.API_KEY)
+            actors = actor.get_actors_ids(self.phrase)
+        except:
+            self.status = 'e'
+            self.save()
+        else:
+            self.response = actors
+            self.status = 'd'
+            self.save()
+            apps.get_model('filmography.Actor').objects.register_from_response(self.response)

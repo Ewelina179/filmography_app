@@ -8,7 +8,6 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import ActorUserRequestForm, CustomUserCreationForm
 from .models import *
-from .get_from_imdb import actor
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Count
 from django.db.models.functions import TruncDate
@@ -32,7 +31,9 @@ def dashboard(request):
     if request.method == 'POST':
         form = ActorUserRequestForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save()
+            obj.user = request.user.userprofile
+            obj.save()
             return HttpResponse('Your answer has been saved!')
     else:
         form = ActorUserRequestForm()
