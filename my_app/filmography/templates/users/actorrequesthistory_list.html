@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for request in actors %}
+    {{request.response}}
+{% endfor %}
+
+{% endblock %}

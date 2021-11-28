@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for request in requests %}
+    {{request.phrase}}
+    {{request.datetime}}
+    {{request.status}}
+{% endfor %}
+
+{% endblock %}
