@@ -1,5 +1,5 @@
 from django.apps import apps
-from django.conf import settings
+#from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -71,7 +71,7 @@ class ActorUserRequest(models.Model):
         self.status = 'r'
         self.save()
         try:
-            actor = ActorInfo(settings.API_KEY)
+            actor = ActorInfo(API_KEY)
             actors = actor.get_actors_ids(self.phrase)
         except:
             self.status = 'e'
@@ -104,4 +104,4 @@ class MovieRequest(models.Model):
             self.response = movies
             self.status = 'd'
             self.save()
-            x = apps.get_model('filmography.Movie').objects.register_from_response(self.response)
+            apps.get_model('filmography.Movie').objects.register_from_response(self.response)
