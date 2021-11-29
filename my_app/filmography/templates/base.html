@@ -24,7 +24,13 @@
             <a class="nav-link" href="{% url 'userprofileview' user.userprofile.pk %}">Profil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'actoruserrequestview' %}">Statystyki dot. API</a>
+            <a class="nav-link" href="{% url 'actorrequesthistory' user.userprofile.pk %}">Historia wyszukiwań</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'actorlistview' %}">Lista aktorów tak w ogóle</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'actoruserrequestview' user.userprofile.pk %}">Statystyki dot. API</a>
           </li>
             {% else %}
             <a class="nav-link" href="{% url 'login'%}">Zaloguj</a>
