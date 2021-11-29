@@ -71,7 +71,7 @@ class ActorUserRequest(models.Model):
         self.status = 'r'
         self.save()
         try:
-            actor = ActorInfo(API_KEY)
+            actor = ActorInfo()
             actors = actor.get_actors_ids(self.phrase)
         except:
             self.status = 'e'
@@ -95,7 +95,7 @@ class MovieRequest(models.Model):
         self.status = 'r'
         self.save()
         try:
-            actor = ActorInfo(settings.API_KEY)
+            actor = ActorInfo()
             movies = actor.get_actor_filmography(self.actor_imdb_id)
         except:
             self.status = 'e'

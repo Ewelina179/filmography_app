@@ -1,11 +1,13 @@
 import requests
 import os
 
+#from my_app.my_app.sitesettings import API_KEY
+
 class ActorInfo:
     BASE_URL = "https://imdb8.p.rapidapi.com/"
     
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self):
+        self.api_key = os.environ.get("API_KEY")
 
     def build_url(self, params):
         if params == "id":
@@ -40,8 +42,8 @@ class ActorInfo:
                 actor = {}
                 actor = {"name": el["l"], "id": el["id"], "image": el['i']["imageUrl"]}
                 data.append(actor)
+        print(data)
         return data
-        # ALGORYTM LEVEINSHTEINA ?
     
     def get_actor_info(self, id):
         info = self.get_data("actor_data", id)
@@ -49,15 +51,10 @@ class ActorInfo:
 
     def get_actor_filmography(self,id):
         filmography = self.get_actor_info(id)["filmography"]
-        #print(self.get_actor_info(data)["filmography"])
         lst_of_filmography = []
         for el in filmography:
             if el["category"]=="actress" or el["category"]=="actor":
-                lst_of_filmography.append(el["title"])
+                movie = {}
+                movie = {"title": el["title"], "id": el["id"]}
+                lst_of_filmography.append(movie)
         return lst_of_filmography
-
-actor = ActorInfo(os.getenv("API_KEY"))
-#x = actor.get_actor_filmography("nm0000148") # po id!
-#y = actor.get_actors_ids("Felicity Jones")
-#print(x)
-#print(y)
