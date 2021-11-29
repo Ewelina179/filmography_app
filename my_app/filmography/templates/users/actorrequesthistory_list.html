@@ -2,8 +2,24 @@
 
 {% block content %}
 
-{% for request in actors %}
-    {{request.response}}
-{% endfor %}
+<h2>Historia zapytań:</h2>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Fraza</th>
+        <th>Data</th>
+        <th>Odpowiedź</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for request in actors %}
+      <tr class="active">
+        <td>{{request.phrase}}</td>
+        <td>{{request.datetime}}</td>
+        <td>{{request.response}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}
