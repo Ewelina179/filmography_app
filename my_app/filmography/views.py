@@ -8,7 +8,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import ActorUserRequestForm, CustomUserCreationForm
 from .models import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Count
 from django.db.models.functions import TruncDate
 
@@ -35,6 +35,7 @@ def dashboard(request):
             obj = form.save()
             obj.user = request.user.userprofile
             obj.save()
+            return HttpResponse('Your answer has been saved!')
     else:
         form = ActorUserRequestForm()
         context = {
@@ -81,14 +82,14 @@ class ActorListView(LoginRequiredMixin, ListView):
     model = Actor
     template_name = "users/actor_list.html"
 
-def actoruserrequestview(request):
+def actoruserrequestview(request, pk):
     return render(request, "users/actoruserrequest_detail.html")
 
 def usaged_api_chart(request):
     labels = []
     data = []
 
-    queryset = ActorUserRequest.objects.all().annotate(date=TruncDate('datetime')).values('date').annotate(**{'dailyusage': Count('date')})
+    queryset = ActorUserRequest.objects.all().filter(user=request.user.userprofile).annotate(date=TruncDate('datetime')).values('date').annotate(**{'dailyusage': Count('date')})
     for entry in queryset:
         labels.append(entry['date'])
         data.append(entry['dailyusage'])
