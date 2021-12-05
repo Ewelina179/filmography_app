@@ -1,13 +1,13 @@
 import requests
 import os
 
-#from my_app.my_app.sitesettings import API_KEY
+from my_app.sitesettings import API_KEY
 
 class ActorInfo:
     BASE_URL = "https://imdb8.p.rapidapi.com/"
     
-    def __init__(self):
-        self.api_key = os.environ.get("API_KEY")
+    def __init__(self, api_key):
+        self.api_key = api_key
 
     def build_url(self, params):
         if params == "id":
@@ -36,13 +36,15 @@ class ActorInfo:
     def get_actors_ids(self, fullname):
         data = []
         actor_id = self.get_data("id", fullname)
+        print(actor_id)
+        print(self.api_key)
         id = actor_id["d"]
         for el in id:
             if el.get("i"):
                 actor = {}
                 actor = {"name": el["l"], "id": el["id"], "image": el['i']["imageUrl"]}
                 data.append(actor)
-        print(data)
+        print(data) # !
         return data
     
     def get_actor_info(self, id):
