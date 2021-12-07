@@ -134,5 +134,5 @@ LOGOUT_REDIRECT_URL = 'dashboard'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-from .sitesettings import *
+from settings.sitesettings import *
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
