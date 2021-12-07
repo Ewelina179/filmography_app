@@ -3,8 +3,6 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
-
 myenv/
 .vscode/* 
 !.vscode/settings.json 
@@ -12,3 +10,5 @@ myenv/
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+sitesettings.py
+profile_images/

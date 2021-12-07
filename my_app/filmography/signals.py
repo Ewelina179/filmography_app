@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from .models import Actor, Movie, UserProfile
 from django.apps import apps
 
+from .get_from_imdb import ActorInfo
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

@@ -22,10 +22,7 @@ def register(request):
             return redirect(reverse("dashboard"))
     else:
         form = CustomUserCreationForm()
-        context = {
-            'form':form,
-        }
-    return render(request, "users/register.html", context)
+    return render(request, "users/register.html")
 
 @login_required
 def dashboard(request):
