@@ -10,5 +10,4 @@ myenv/
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
-sitesettings.py
 profile_images/
