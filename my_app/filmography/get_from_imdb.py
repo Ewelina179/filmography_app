@@ -1,7 +1,7 @@
 import requests
 import os
 
-from my_app.sitesettings import API_KEY
+from my_app.settings.sitesettings import API_KEY
 
 class ActorInfo:
     BASE_URL = "https://imdb8.p.rapidapi.com/"
