@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<ol>
+{% for movie in movies %}
+    <li>{{movie.movie.title}}</li>
+    <li>{{movie.actor.fullname}}</li>
+{% endfor %}
+</ol>
+{% endblock %}
