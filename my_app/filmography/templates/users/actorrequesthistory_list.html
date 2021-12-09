@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         {% for request in actors %}
-        {% if request.status == 'p' %}
+        {#% if request.status == 'p' %#}
       <tr class="active">
         <td>{{request.phrase}}</td>
         <td><a href="{% url 'apirequesthistory' user.userprofile.pk request.phrase %}">Link do aktorów dla wyszukiwanej frazy, który powoduje, że jest TemplateSyntaxError</a></td> 
@@ -22,7 +22,7 @@
         <td>{{request.status}}</td>
         <td>{{request.user.daily_api_counter}}</td>
       </tr>
-      {% endif %}
+      {#% endif %#}
       {% endfor %}
     </tbody>
   </table>

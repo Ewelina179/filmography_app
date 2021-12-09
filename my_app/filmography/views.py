@@ -80,10 +80,19 @@ class ApiRequestHistoryList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return ActorUser.objects.filter(
             user=self.request.user.userprofile, phrase=self.kwargs['phrase']
-        ).order_by('-datetime')
-    # <td>{{<a href="{% url 'apirequesthistory' user.userprofile.pk request.phrase %}">Link do aktorów dla wyszukiwanej frazy, który powoduje, że jest TemplateSyntaxError</a>}}</td> w html-u
+        )
+"""
 
+class ApiRequestHistoryList(LoginRequiredMixin, ListView):
+    model = Actor
+    context_object_name = 'actors'
+    template_name = "users/apirequesthistory_list.html"
 
+    def get_queryset(self):
+        return ActorUser.objects.filter(
+            user=self.request.user.userprofile, fullname__contains=self.kwargs['phrase']
+        )
+"""
 class ActorRequestHistoryList(LoginRequiredMixin, ListView):
     model = ActorUserRequest
     context_object_name = 'actors'
