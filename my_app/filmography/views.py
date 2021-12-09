@@ -36,13 +36,27 @@ def dashboard(request):
             obj = form.save()
             obj.user = request.user.userprofile
             obj.save()
-            return HttpResponse('Your answer has been saved!')
+            return redirect("actorrequesthistory", request.user.userprofile)
     else:
         form = ActorUserRequestForm()
         context = {
             'form':form,
         }
     return render(request, "users/dashboard.html", context)
+
+"""
+        form = ActorUserRequestForm(request.POST)
+        form.user=request.user.userprofile
+        #print(form.user)
+        if form.is_valid():
+            #print(obj.user)
+            # na tym etapie
+            obj = form.save()
+            obj.save()
+            #print(obj.user) # jest. ale nie ma w clean
+            return HttpResponse('Your answer has been saved!')
+"""
+
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = UserProfile
@@ -59,14 +73,15 @@ class UpdateUserProfile(LoginRequiredMixin, UpdateView):
 
 
 class ApiRequestHistoryList(LoginRequiredMixin, ListView):
-    model = ActorUserRequest
-    context_object_name = 'requests'
+    model = ActorUser
+    context_object_name = 'actors'
     template_name = "users/apirequesthistory_list.html"
 
     def get_queryset(self):
-        return ActorUserRequest.objects.filter(
-            user=self.request.user.userprofile
+        return ActorUser.objects.filter(
+            user=self.request.user.userprofile, phrase=self.kwargs['phrase']
         ).order_by('-datetime')
+    # <td>{{<a href="{% url 'apirequesthistory' user.userprofile.pk request.phrase %}">Link do aktorów dla wyszukiwanej frazy, który powoduje, że jest TemplateSyntaxError</a>}}</td> w html-u
 
 
 class ActorRequestHistoryList(LoginRequiredMixin, ListView):
@@ -79,9 +94,17 @@ class ActorRequestHistoryList(LoginRequiredMixin, ListView):
             user=self.request.user.userprofile
         ).order_by('-datetime')
 
-class ActorListView(LoginRequiredMixin, ListView):
+class ActorListView(LoginRequiredMixin, ListView): #ogólna lista aktorów?
     model = Actor
     template_name = "users/actor_list.html"
+
+    def get_queryset(self):
+        pass 
+
+class ActorMovieListView(LoginRequiredMixin, ListView):
+    model = ActorMovie
+    context_object_name = 'movies'
+    template_name = "users/actor_movie_list.html" # tylko dla tego aktora przypisanego do usera.
 
 def actoruserrequestview(request, pk):
     return render(request, "users/actoruserrequest_detail.html")
