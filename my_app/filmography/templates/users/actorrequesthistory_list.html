@@ -13,11 +13,15 @@
     </thead>
     <tbody>
         {% for request in actors %}
+        {% if request.status == 'p' %}
       <tr class="active">
         <td>{{request.phrase}}</td>
         <td>{{request.datetime}}</td>
         <td>{{request.response}}</td>
+        <td>{{request.status}}</td>
+        <td>{{request.user.daily_api_counter}}</td>
       </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>

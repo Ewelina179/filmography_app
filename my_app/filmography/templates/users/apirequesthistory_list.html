@@ -2,10 +2,15 @@
 
 {% block content %}
 
-{% for request in requests %}
-    {{request.phrase}}
-    {{request.datetime}}
-    {{request.status}}
-{% endfor %}
+<h2>Aktorzy z konkretnej frazy:</h2>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Odpowiedź</th>
+        {% for el in actors %}
+            {{el.fullname}}
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}
