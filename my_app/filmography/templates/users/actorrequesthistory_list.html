@@ -16,6 +16,7 @@
         {% if request.status == 'p' %}
       <tr class="active">
         <td>{{request.phrase}}</td>
+        <td><a href="{% url 'apirequesthistory' user.userprofile.pk request.phrase %}">Link do aktorów dla wyszukiwanej frazy, który powoduje, że jest TemplateSyntaxError</a></td> 
         <td>{{request.datetime}}</td>
         <td>{{request.response}}</td>
         <td>{{request.status}}</td>
