@@ -32,6 +32,7 @@ def register(request):
 def dashboard(request):
     if request.method == 'POST':
         form = ActorUserRequestForm(request.POST)
+        form.user = request.user
         if form.is_valid():
             obj = form.save()
             obj.user = request.user.userprofile
@@ -43,19 +44,6 @@ def dashboard(request):
             'form':form,
         }
     return render(request, "users/dashboard.html", context)
-
-"""
-        form = ActorUserRequestForm(request.POST)
-        form.user=request.user.userprofile
-        #print(form.user)
-        if form.is_valid():
-            #print(obj.user)
-            # na tym etapie
-            obj = form.save()
-            obj.save()
-            #print(obj.user) # jest. ale nie ma w clean
-            return HttpResponse('Your answer has been saved!')
-"""
 
 
 class UserProfileView(LoginRequiredMixin, DetailView):

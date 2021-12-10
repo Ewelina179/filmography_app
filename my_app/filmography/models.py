@@ -102,13 +102,6 @@ class ActorUserRequest(models.Model):
 
     objects = ActorUserRequestManager()
 
-    def clean(self):
-        print(self.user) # tutaj None. ten sam problem co z sygnałem. user jest dodany po zapisaniu formularza - view dashboard
-        #print(self.phrase)
-        #if self.user.daily_api_counter > 10:
-        #    raise ValidationError('Przekroczono dozwoloną liczbę zapytań do API')
-        pass
-
     def set_response(self):
         self.status = 'r'
         self.save()
