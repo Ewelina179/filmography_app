@@ -31,13 +31,21 @@ def register(request):
 @login_required
 def dashboard(request):
     if request.method == 'POST':
-        form = ActorUserRequestForm(request.POST)
+        form = ActorUserRequestForm(request.POST) #initial={'user':request.user}
         form.user = request.user
         if form.is_valid():
             obj = form.save()
-            obj.user = request.user.userprofile
+            obj.user = request.user.userprofile # !!!!!!!!!!!!
             obj.save()
+            print(obj)
+            print(request.user.userprofile)
+            #obj.user = request.user.userprofile
+            #obj.save()
             return redirect("actorrequesthistory", request.user.userprofile)
+        else:
+            context = {
+            'form':form,
+        }
     else:
         form = ActorUserRequestForm()
         context = {
@@ -59,6 +67,7 @@ class UpdateUserProfile(LoginRequiredMixin, UpdateView):
 
     template_name = "users/userprofile_form.html"
 
+""""
 
 class ApiRequestHistoryList(LoginRequiredMixin, ListView):
     model = ActorUser
@@ -77,21 +86,20 @@ class ApiRequestHistoryList(LoginRequiredMixin, ListView):
     template_name = "users/apirequesthistory_list.html"
 
     def get_queryset(self):
-        return ActorUser.objects.filter(
-            user=self.request.user.userprofile, fullname__contains=self.kwargs['phrase']
+        return Actor.objects.filter(fullname__icontains=self.kwargs['phrase']
         )
-"""
+
+
 class ActorRequestHistoryList(LoginRequiredMixin, ListView):
     model = ActorUserRequest
     context_object_name = 'actors'
     template_name = "users/actorrequesthistory_list.html"
-
     def get_queryset(self):
         return ActorUserRequest.objects.filter(
             user=self.request.user.userprofile
         ).order_by('-datetime')
 
-class ActorListView(LoginRequiredMixin, ListView): #ogólna lista aktorów?
+class ActorListView(LoginRequiredMixin, ListView):
     model = Actor
     template_name = "users/actor_list.html"
 
@@ -101,7 +109,9 @@ class ActorListView(LoginRequiredMixin, ListView): #ogólna lista aktorów?
 class ActorMovieListView(LoginRequiredMixin, ListView):
     model = ActorMovie
     context_object_name = 'movies'
-    template_name = "users/actor_movie_list.html" # tylko dla tego aktora przypisanego do usera.
+    template_name = "users/actor_movie_list.html"
+    def get_queryset(self):
+        return ActorMovie.objects.filter(actor=self.kwargs['actor'])
 
 def actoruserrequestview(request, pk):
     return render(request, "users/actoruserrequest_detail.html")

@@ -15,5 +15,5 @@ urlpatterns = [
     path("actors", ActorListView.as_view(), name="actorlistview"),
     path("usaged_api_chart/", usaged_api_chart, name="usaged_api_chart"),
     path("actoruserrequestview/<pk>", actoruserrequestview, name="actoruserrequestview"),
-    path("actormovies", ActorMovieListView.as_view(), name="actormovielistview")
+    path("myprofile/<pk>/apirequesthistory/<actor>/actormovies", ActorMovieListView.as_view(), name="actormovielistview"), #
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,6 +5,7 @@
 <ol>
 {% for actor in actor_list %}
     <li>{{actor.fullname}}</li>
+    {#<a href="{% url 'apirequesthistory' user.userprofile.pk request.phrase %}">Link do aktorów dla wyszukiwanej frazy, który powoduje, że jest TemplateSyntaxError</a> #}
 {% endfor %}
 </ol>
 {% endblock %}

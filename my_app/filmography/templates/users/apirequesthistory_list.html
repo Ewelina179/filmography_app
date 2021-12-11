@@ -8,9 +8,10 @@
       <tr>
         <th>Odpowiedź</th>
         {% for el in actors %}
-            {{el.actor.fullname}}
+            {{el.fullname}}
+            <a href="{% url 'actormovielistview' pk=user.userprofile.pk actor=el.id %}">Link do aktorów dla wyszukiwanej frazy, który powoduje, że jest TemplateSyntaxError</a>
+            {{el.pk}}
       {% endfor %}
     </tbody>
   </table>
-
 {% endblock %}
