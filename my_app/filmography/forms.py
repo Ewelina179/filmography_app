@@ -10,10 +10,10 @@ class ActorUserRequestForm(ModelForm):
         fields = ['phrase']
 
     def clean(self):
-        print(self.user)
+        #print(self.user)
         if self.user.userprofile.daily_api_counter > 10:
-                raise ValidationError('Przekroczono dozwoloną liczbę zapytań do API')
-
+            raise ValidationError('Przekroczono dozwoloną liczbę zapytań do API')
+        pass
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
