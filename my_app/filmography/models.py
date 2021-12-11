@@ -94,15 +94,11 @@ class ActorUserRequest(models.Model):
     def set_response(self):
         self.status = 'r'
         self.save()
-        print(self.phrase)
         x=Actor.objects.filter(fullname__icontains=self.phrase)
         if x:
             self.response="Aktor jest w bazie."
             self.status = 'd'
             self.save()
-            print(self.response)
-            print(x)
-            print(self.status)
         else:
             try:
                 actor = ActorInfo(settings.API_KEY)
