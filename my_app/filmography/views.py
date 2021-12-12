@@ -50,6 +50,7 @@ def dashboard(request):
         form = ActorUserRequestForm()
         context = {
             'form':form,
+            'actors':Actor.objects.all()
         }
     return render(request, "users/dashboard.html", context)
 
@@ -129,3 +130,20 @@ def usaged_api_chart(request):
         'labels': labels,
         'data': data,
     })
+
+def like(request):
+    if request.method == 'GET':
+        print(request.GET)
+        actor_id = request.GET['actor_id']
+        print(actor_id)
+        likedactors = Actor.objects.get(id=actor_id)
+        if ActorUser.objects.filter(actor=likedactors, user=request.user.userprofile).exists():
+            m=ActorUser.objects.filter(actor=likedactors, user=request.user.userprofile).delete()
+        else:
+            m=ActorUser(actor=likedactors, user=request.user.userprofile)
+            m.save()
+        print(m)
+        print(ActorUser.objects.filter(user=request.user.userprofile))
+        return HttpResponse('successful')
+    else:
+        return HttpResponse("unsuccesful")

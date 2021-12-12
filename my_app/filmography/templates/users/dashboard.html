@@ -14,4 +14,36 @@
     <button type="submit">Wyszukaj</button>
   </form>
 
+
+
+
+
+  <div class = "display-3 color-red"><center>Lista aktorów<br>testowo</center></div>
+    {% for actor in actors %}
+        <div class = 'container jumbotron'>
+          <h3 class="display-5">{{ forloop.counter }}. {{ actor.fullname }}</h3>
+        <div type="text/css" class = "container">Author : {{ actor.fullname }}</div> 
+        <a class="likebutton btn btn-primary btn-lg" id="like{{ actor.id }}" href="#" data-catid="{{ actor.id }}">Like</a> </p> <p id="message{{actor.id}}">
+</p>
+</div>
+{% endfor %}
+
+
+  <script type="text/javascript"> 
+    $('.likebutton').click(function(){ 
+    var id; 
+    id = $(this).attr("data-catid"); 
+    $.ajax( 
+    { 
+        type:"GET", 
+        url: "{% url 'like' %}", 
+        data:{ 
+              actor_id: id 
+    }, 
+    success: function( data ) 
+    { 
+        $( '#like'+ actor_id ).removeClass('btn btn-primary btn-lg'); 
+        $( '#like'+ actor_id ).addClass('btn btn-success btn-lg'); } }) });
+    </script>
+
 {% endblock %}
