@@ -12,7 +12,7 @@ An application that connects with outer API that allows searching filmography of
 - cd my_app
 - python manage.py migrate
 - python manage.py runserver
-- # todo how schdeuler task (cron)
+- todo how schdeuler task (cron)
 
 ## Technologies
 
