@@ -21,5 +21,5 @@ An application that connects with outer API that allows searching filmography of
 
 ## To do:
 
-Possibility to save favorite actors and get a newsletter about new movies which they appeared.
-Add APScheduler module to schedule tasks on production environment (deployed on Heroku).
+- Possibility to save favorite actors and get a newsletter about new movies which they appeared.
+- Apply APScheduler module to schedule tasks on production environment (deployed on Heroku).
