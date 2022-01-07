@@ -11,6 +11,7 @@ from .models import *
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Count
 from django.db.models.functions import TruncDate
+import json
 
 
 def register(request):
@@ -50,7 +51,8 @@ def dashboard(request):
         form = ActorUserRequestForm()
         context = {
             'form':form,
-            'actors':Actor.objects.all()
+            'actors':Actor.objects.all(),
+            'useractors':ActorUser.objects.filter(user=request.user.userprofile)
         }
     return render(request, "users/dashboard.html", context)
 
@@ -132,18 +134,28 @@ def usaged_api_chart(request):
     })
 
 def like(request):
-    if request.method == 'GET':
-        print(request.GET)
-        actor_id = request.GET['actor_id']
+    if request.method == 'POST':
+        print(request.POST)
+        actor_id = request.POST['actor_id']
         print(actor_id)
         likedactors = Actor.objects.get(id=actor_id)
-        if ActorUser.objects.filter(actor=likedactors, user=request.user.userprofile).exists():
-            m=ActorUser.objects.filter(actor=likedactors, user=request.user.userprofile).delete()
+        print(likedactors)
+        actors=ActorUser.objects.get(actor=likedactors, user=request.user.userprofile)
+        print(actors.liked)
+        if actors.liked == False:
+            actors.liked = True
+            a=actors
+            a.save()
+            r={"action": "added", "actor_id": actor_id}
+            print(ActorUser.objects.filter(user=request.user.userprofile))
+            return HttpResponse(json.dumps(r), content_type='application/json')
         else:
-            m=ActorUser(actor=likedactors, user=request.user.userprofile)
-            m.save()
-        print(m)
-        print(ActorUser.objects.filter(user=request.user.userprofile))
-        return HttpResponse('successful')
-    else:
-        return HttpResponse("unsuccesful")
+            print(ActorUser.objects.filter(user=request.user.userprofile))
+            actors.liked = False
+            a=actors
+            a.save()
+            print(actors.liked)
+            r={"action": "removed", "actor_id": actor_id}
+            print(r)
+            return HttpResponse(json.dumps(r), content_type='application/json')
+        

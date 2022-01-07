@@ -28,6 +28,7 @@ class ActorUser(models.Model):
     user = models.ForeignKey('filmography.UserProfile', on_delete=models.CASCADE)
     actor = models.ForeignKey('filmography.Actor', on_delete=models.CASCADE)
     phrase = models.CharField(max_length=64) # usunąć
+    liked = models.BooleanField()
 
     objects=ActorUserManager()
 
@@ -111,6 +112,7 @@ class ActorUserRequest(models.Model):
                 self.status = 'd'
                 self.save()
                 apps.get_model('filmography.Actor').objects.register_from_response(self.response)
+                apps.get_model('filmography.ActorUser').objects.register_from_response(self.response)
                 x = apps.get_model('filmography.UserProfile').objects.filter(user=self.user.user).first()
                 x.daily_api_counter +=1
                 x.save()
