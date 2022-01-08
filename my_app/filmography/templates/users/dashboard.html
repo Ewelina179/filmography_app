@@ -47,13 +47,15 @@
               'csrfmiddlewaretoken': '{{ csrf_token }}',
               dataType: "json",
     }, 
+    context:this,
     success: function(response) {
-      selector = document.getElementsByName(response.actor_id);
         if(response.action=='added'){
-          $(selector).addClass('likebutton btn btn-light');
+          $(this).addClass('btn-light');
+          console.log($(this))
         }
-        else if(response.action=='removed'){
-          $(selector).addClass('likebutton btn btn-dark');
+        else{
+          $(this).addClass('likebutton btn btn-dark');
+          console.log($(this))
         } } }) });
     </script>
 

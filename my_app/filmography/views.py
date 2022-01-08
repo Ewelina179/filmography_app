@@ -135,27 +135,18 @@ def usaged_api_chart(request):
 
 def like(request):
     if request.method == 'POST':
-        print(request.POST)
         actor_id = request.POST['actor_id']
-        print(actor_id)
         likedactors = Actor.objects.get(id=actor_id)
-        print(likedactors)
         actors=ActorUser.objects.get(actor=likedactors, user=request.user.userprofile)
-        print(actors.liked)
         if actors.liked == False:
             actors.liked = True
-            a=actors
-            a.save()
-            r={"action": "added", "actor_id": actor_id}
-            print(ActorUser.objects.filter(user=request.user.userprofile))
-            return HttpResponse(json.dumps(r), content_type='application/json')
+            actors.save()
+            r={"action": "added"}
+            return JsonResponse(r)
         else:
-            print(ActorUser.objects.filter(user=request.user.userprofile))
             actors.liked = False
             a=actors
             a.save()
-            print(actors.liked)
-            r={"action": "removed", "actor_id": actor_id}
-            print(r)
-            return HttpResponse(json.dumps(r), content_type='application/json')
+            r={"action": "removed"}
+            return JsonResponse(r)
         
