@@ -35,13 +35,11 @@ def dashboard(request):
         form = ActorUserRequestForm(request.POST) #initial={'user':request.user}
         form.user = request.user
         if form.is_valid():
-            obj = form.save()
-            obj.user = request.user.userprofile # !!!!!!!!!!!!
+            obj = form.save(commit=False)
+            obj.user = request.user.userprofile
             obj.save()
-            print(obj)
+            print(form.user)
             print(request.user.userprofile)
-            #obj.user = request.user.userprofile
-            #obj.save()
             return redirect("actorrequesthistory", request.user.userprofile)
         else:
             context = {
@@ -55,6 +53,7 @@ def dashboard(request):
             'useractors':ActorUser.objects.filter(user=request.user.userprofile)
         }
     return render(request, "users/dashboard.html", context)
+
 
 
 class UserProfileView(LoginRequiredMixin, DetailView):
@@ -109,6 +108,7 @@ class ActorListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         pass 
 
+    
 class ActorMovieListView(LoginRequiredMixin, ListView):
     model = ActorMovie
     context_object_name = 'movies'
@@ -149,4 +149,3 @@ def like(request):
             a.save()
             r={"action": "removed"}
             return JsonResponse(r)
-        
