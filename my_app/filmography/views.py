@@ -1,3 +1,4 @@
+from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
@@ -133,8 +134,9 @@ def usaged_api_chart(request):
         'data': data,
     })
 
-def like(request):
-    if request.method == 'POST':
+
+class Like(View):
+    def post(self, request):
         actor_id = request.POST['actor_id']
         likedactors = Actor.objects.get(id=actor_id)
         actors=ActorUser.objects.get(actor=likedactors, user=request.user.userprofile)
