@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+import csv
 
 from .get_from_imdb import ActorInfo
 
@@ -22,13 +23,14 @@ class ActorUserManager(models.Manager):
                     actor = Actor.objects.get(imdb_id=entry['id']),
                     user = user,
                     phrase = phrase
-                )          
+                )
 
+    
 class ActorUser(models.Model):
     user = models.ForeignKey('filmography.UserProfile', on_delete=models.CASCADE)
     actor = models.ForeignKey('filmography.Actor', on_delete=models.CASCADE)
     phrase = models.CharField(max_length=64) # usunąć
-    liked = models.BooleanField()
+    liked = models.BooleanField(default=False)
 
     objects=ActorUserManager()
 
@@ -44,12 +46,14 @@ class ActorManager(models.Manager):
                         'fullname': entry['name']
                     }
                 )
-    
+
+
 class Actor(models.Model):
     fullname = models.CharField(max_length=128)
     imdb_id = models.CharField(max_length=64, unique=True)
 
     objects = ActorManager()
+
 
 class MovieManager(models.Manager):
     def register_from_response(self, response):
@@ -68,6 +72,7 @@ class Movie(models.Model):
 
     objects = MovieManager()
 
+
 class ActorMovieManager(models.Manager):
     def register_from_response(self, response, actor_imdb_id):
         for entry in response:
@@ -76,11 +81,18 @@ class ActorMovieManager(models.Manager):
                 movie = Movie.objects.get(id_from_imdb=entry['id'])
             )
 
+    def save_to_db(self, actor, movies):
+        for movie in movies:
+            self.get_or_create(
+                    actor = actor,
+                    movie = movie[0])
+
 class ActorMovie(models.Model):
     actor = models.ForeignKey('filmography.Actor', on_delete=models.CASCADE)
     movie = models.ForeignKey('filmography.Movie', on_delete=models.CASCADE)
 
     objects = ActorMovieManager()
+
 
 class ActorUserRequest(models.Model):
     user = models.ForeignKey('filmography.UserProfile', on_delete=models.SET_NULL, null=True)
@@ -93,9 +105,11 @@ class ActorUserRequest(models.Model):
     )
 
     def set_response(self):
+        print(self.user)
         self.status = 'r'
         self.save()
         x=Actor.objects.filter(fullname__icontains=self.phrase)
+        print(x)
         if x:
             self.response="Aktor jest w bazie."
             self.status = 'd'
@@ -112,10 +126,9 @@ class ActorUserRequest(models.Model):
                 self.status = 'd'
                 self.save()
                 apps.get_model('filmography.Actor').objects.register_from_response(self.response)
-                apps.get_model('filmography.ActorUser').objects.register_from_response(self.response)
-                x = apps.get_model('filmography.UserProfile').objects.filter(user=self.user.user).first()
-                x.daily_api_counter +=1
-                x.save()
+                apps.get_model('filmography.ActorUser').objects.register_from_response(self.response, user=self.user, phrase=self.phrase)
+                self.user.daily_api_counter += 1
+                self.save()
 
 class MovieRequest(models.Model):
     actor_imdb_id = models.CharField(max_length=64)
@@ -127,18 +140,21 @@ class MovieRequest(models.Model):
     )
 
     def set_response(self):
+        print("czy coś się dzieje tu")
         self.status = 'r'
         self.save()
-        x = Actor.objects.filter(imdb_id=self.actor_imdb_id).first() # Czy jest to konieczne, czy zbędne.
-        y = ActorMovie.objects.filter(actor=x.id)
-        if y:
-            self.response="Filmy znajdują się w bazie."
+        actor = Actor.objects.filter(imdb_id=self.actor_imdb_id).first() 
+        actormovie = ActorMovie.objects.filter(actor=actor.id)
+
+        if actormovie:
+            self.response = "Filmy znajdują się w bazie."
             self.status = 'd'
             self.save()
         else:
             try:
                 actor = ActorInfo(settings.API_KEY)
                 movies = actor.get_actor_filmography(self.actor_imdb_id)
+                print(movies)
             except:
                 self.status = 'e'
                 self.save()
