@@ -15,18 +15,15 @@
   </form>
 
 
-
-  <div class = "display-3 color-red"><center>Lista aktorów<br>testowo</center></div>
+  <br>
+  <div class = "display-3 color-red"><center>Lista wyszukiwanych aktorów<br></center></div>
+  <br>
   {% for actor in useractors %}
     {% if actor.liked == True %}
-      <div class = 'container jumbotron'>
         <h3 class="display-5">{{ forloop.counter }}. {{ actor.actor.fullname }}</h3>
-      <div type="text/css" class = "container">Actor : {{ actor.actor.fullname }}</div> 
       <a class="likebutton btn btn-light btn-lg" id="like{{ actor.actor.id }}"  data-catid="{{ actor.actor.id }}">Like</a> </p> <p id="message{{actor.actor.id}}">
-      {% else %}
-      <div class = 'container jumbotron'>
+    {% else %}
         <h3 class="display-5">{{ forloop.counter }}. {{ actor.actor.fullname }}</h3>
-      <div type="text/css" class = "container">Actor : {{ actor.actor.fullname }}</div> 
       <a class="likebutton btn btn-dark btn-lg" id="like{{ actor.actor.id }}"  data-catid="{{ actor.actor.id }}">Like</a> </p> <p id="message{{actor.actor.id}}">
     {% endif %}
   {% endfor %}
