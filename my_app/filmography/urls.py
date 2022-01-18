@@ -1,6 +1,6 @@
 from django.conf.urls import include
 from django.urls import path
-from filmography.views import ActorMovieListView, register, dashboard, like,UserProfileView, UpdateUserProfile, ApiRequestHistoryList, ActorRequestHistoryList, ActorListView, usaged_api_chart, actoruserrequestview
+from filmography.views import ActorMovieListView, register, dashboard, UserProfileView, UpdateUserProfile, ApiRequestHistoryList, ActorRequestHistoryList, ActorListView, usaged_api_chart, actoruserrequestview, Like
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,5 +16,5 @@ urlpatterns = [
     path("usaged_api_chart/", usaged_api_chart, name="usaged_api_chart"),
     path("actoruserrequestview/<pk>", actoruserrequestview, name="actoruserrequestview"),
     path("myprofile/<pk>/apirequesthistory/<actor>/actormovies", ActorMovieListView.as_view(), name="actormovielistview"),
-    path('like/', like, name='like'), 
+    path('like/', Like.as_view(), name='like'), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
