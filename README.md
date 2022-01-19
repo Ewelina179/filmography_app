@@ -6,10 +6,11 @@ An application that connects with outer API that allows searching filmography of
 
 ## Prerequisites and usage
 
-- git clone https://github.com/Ewelina179/filmography_app.git
+- git clone
 - cd filmography_app
 - pip install -r requirements.txt
 - cd my_app
+- python manage.py makemigrations
 - python manage.py migrate
 - python manage.py runserver
 - todo how schdeuler task (cron)
