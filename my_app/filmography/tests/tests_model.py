@@ -3,14 +3,22 @@ from filmography.models import Actor, UserProfile
 
 import pytest
 
+@pytest.mark.django_db
+def test_new_user(user_factory):
+    user = user_factory.create()
+    count = User.objects.all().count()
+    #print(user.username)
+    #print(count)
+    assert True
+
 @pytest.fixture
 def test_user():
     return User.objects.create_user('ann', 'lennon@thebeatles.com', 'annpassword')
 
-@pytest.mark.django_db
-def test_user_create():
-    User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-    assert User.objects.count() == 1
+#@pytest.mark.django_db
+#def test_user_create():
+#   User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+#    assert User.objects.count() == 1
 
 #@pytest.mark.django_db
 #def test_db_user(test_user):
