@@ -13,7 +13,6 @@ An application that connects with outer API that allows searching filmography of
 - python manage.py makemigrations
 - python manage.py migrate
 - python manage.py runserver
-- todo how schdeuler task (cron)
 
 ## Technologies
 
