@@ -45,3 +45,19 @@ def test_actor_list_view_response(auto_login_user):
    content = response.content.decode(response.charset)
    assert response.status_code == 200
    assert "Lista aktorów" in content
+   #assert response.content_type == "text\html"
+
+@pytest.mark.django_db
+def test_post_dashboard(auto_login_user):
+   url = reverse("dashboard")
+   client, user = auto_login_user()
+   response = client.post(url, {"phrase": "Felicity Jones"})
+   assert response.status_code == 302
+
+def test_post_dashboard(client, django_user_model):
+    username = "user1"
+    password = "bar"
+    user = django_user_model.objects.create_user(username=username, password=password)
+    client.force_login(user)
+    response = client.get("/")
+    assert response.status_code == 200
