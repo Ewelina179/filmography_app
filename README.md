@@ -14,6 +14,10 @@ An application that connects with outer API that allows searching filmography of
 - python manage.py migrate
 - python manage.py runserver
 
+## For testing
+
+- need to set enviroment variable: DJANGO_APP_STAGE=testing
+
 ## Technologies
 
 - Python
